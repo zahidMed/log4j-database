@@ -13,7 +13,7 @@ This appender was developed to support OrientDB version 2.0.10 or higher.
 
 ###OrientDBAppender configuration
 
-the appender ~~org.log4database.orientdb.OrientDBAppender~~ can be configured using the following parameters in log4j configuration file:
+the appender **org.log4database.orientdb.OrientDBAppender** can be configured using the following parameters in log4j configuration file:
 
 Property | Description
 ------------ | -------------
