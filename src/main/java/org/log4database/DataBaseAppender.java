@@ -42,7 +42,7 @@ import org.log4database.orientdb.OrientdbEventMapper;
  */
 public abstract class DataBaseAppender  extends AppenderSkeleton {
 
-	private EventMapper eventMapper= new OrientdbEventMapper();
+	protected EventMapper eventMapper=null;
 	protected List queue= new ArrayList();
 
 	//configuration properties

@@ -52,6 +52,7 @@ public class OrientDBAppender extends DataBaseAppender {
 		port = DEFAULT_DB_PORT;
 		databaseName = DEFAULT_DB_DATABASE_NAME;
 		table = DEFAULT_DB_TABLE_NAME;
+		eventMapper= new OrientdbEventMapper();
 	}
 
 	/**

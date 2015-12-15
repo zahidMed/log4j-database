@@ -46,7 +46,7 @@ public class EventMapper {
     public static final String CLASS = "class";
 
     public static final String FQCN = "fullyQualifiedClassName";
-    public static final String PACKAGE = "package";
+   //public static final String PACKAGE = "package";
     public static final String CLASS_NAME = "className";
 
 

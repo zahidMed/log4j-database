@@ -55,8 +55,9 @@ public class OrientdbEventMapper extends EventMapper{
 			putIfNotNull(obj,MESSAGE, loggingEvent.getMessage().toString());
 		putIfNotNull(obj,FILE_NAME, loggingEvent.getLocationInformation().getFileName());
 		putIfNotNull(obj,METHOD, loggingEvent.getLocationInformation().getMethodName());
-		putIfNotNull(obj,LINE_NUMBER, loggingEvent.getLocationInformation().getLineNumber());
-		putIfNotNull(obj,CLASS, loggingEvent.getLocationInformation().getClass().toString());
+		if(loggingEvent.getLocationInformation().getLineNumber()!=null && loggingEvent.getLocationInformation().getLineNumber().matches("\\d+"))
+			obj.put(LINE_NUMBER, Integer.parseInt(loggingEvent.getLocationInformation().getLineNumber()));
+		putIfNotNull(obj,CLASS, loggingEvent.getLocationInformation().getClassName());
 	    
 		addProperties(obj, loggingEvent.getProperties());
 		
