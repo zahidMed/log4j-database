@@ -34,7 +34,7 @@ import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 
 /**
  * Log4j appender that stores log events in a queue then in OrientDB database
- * @see {@link OrientDBAppender}
+ * @see {@link DataBaseAppender}
  * @author ZAHID Mohammed<zahid.med@gmail.com>
  *
  */
@@ -62,19 +62,18 @@ public class OrientDBAppender extends DataBaseAppender {
 	 */
 	@Override
 	public void activateOptions() {
-		try{
-			maxQueueLength=Integer.parseInt(queueLength);
-		}
-		catch(NumberFormatException e){
-			errorHandler.error("queueLength must have a numerical value", e,
-					ErrorCode.GENERIC_FAILURE);
-		}
-		try{
-			id=Integer.parseInt(applicationId);
-		}
-		catch(NumberFormatException e){
-			errorHandler.error("applicationId must have a numerical value", e,
-					ErrorCode.GENERIC_FAILURE);
+		if(queueLength!=null && queueLength.matches("\\d+"))
+			try {
+				maxQueueLength = Integer.parseInt(queueLength);
+			} catch (NumberFormatException e) {
+				errorHandler.error("queueLength must have a numerical value", e, ErrorCode.GENERIC_FAILURE);
+			}
+		if(applicationId!=null && applicationId.matches("\\d+"))
+		try 
+		{
+			id = Integer.parseInt(applicationId);
+		} catch (NumberFormatException e) {
+			errorHandler.error("applicationId must have a numerical value", e, ErrorCode.GENERIC_FAILURE);
 		}
 		try {
 			if (database != null)

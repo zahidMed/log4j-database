@@ -3,6 +3,12 @@ package org.log4database.common;
 import java.util.Date;
 import java.util.Map;
 
+/**
+ * Basic class that represents a log event
+ * this object can be used by many appenders in order to store it.
+ * @see {@link BasicEventMapper}
+ * @author ZAHID Mohammed<zahid.med@gmail.com>
+ */
 public class Event {
 
 	Integer appId;
@@ -10,12 +16,17 @@ public class Event {
 	Date timestamp;
 	
 	String level;
+	
 	String thread;
+	
 	String loggerName;
+	
 	String method;
+	
 	Integer lineNumber;
 	
 	String className;
+	
 	String message;
 	
 	String fileName;

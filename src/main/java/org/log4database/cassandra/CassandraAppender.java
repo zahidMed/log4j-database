@@ -5,12 +5,19 @@ import org.apache.log4j.spi.ErrorCode;
 import org.log4database.DataBaseAppender;
 import org.log4database.common.BasicEventMapper;
 import org.log4database.common.Event;
+import org.log4database.orientdb.OrientDBAppender;
 
 import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 
+/**
+ * Log4j appender that stores log events in a queue then in Cassandra database
+ * @see {@link DataBaseAppender}
+ * @author ZAHID Mohammed<zahid.med@gmail.com>
+ *
+ */
 public class CassandraAppender extends DataBaseAppender {
 
 	private final static String DEFAULT_DB_HOSTNAME = "localhost";
@@ -30,28 +37,45 @@ public class CassandraAppender extends DataBaseAppender {
 	}
 
 	/**
-	 * convert numerical configuration file properties and open connection pool
-	 * to OrientDB database
+	 * convert numerical configuration file properties and open connection session
+	 * to Cassandra database
 	 * 
 	 * @see {@link AppenderSkeleton}{@link #activateOptions()}
 	 */
 	@Override
 	public void activateOptions() {
-		try {
-			maxQueueLength = Integer.parseInt(queueLength);
-		} catch (NumberFormatException e) {
-			errorHandler.error("queueLength must have a numerical value", e, ErrorCode.GENERIC_FAILURE);
-		}
-		try {
+		
+		if(queueLength!=null && queueLength.matches("\\d+"))
+			try {
+				maxQueueLength = Integer.parseInt(queueLength);
+			} catch (NumberFormatException e) {
+				errorHandler.error("queueLength must have a numerical value", e, ErrorCode.GENERIC_FAILURE);
+			}
+		if(applicationId!=null && applicationId.matches("\\d+"))
+		try 
+		{
 			id = Integer.parseInt(applicationId);
 		} catch (NumberFormatException e) {
 			errorHandler.error("applicationId must have a numerical value", e, ErrorCode.GENERIC_FAILURE);
 		}
 
-		cluster = Cluster.builder().addContactPoint(hostname).build();
-		session = cluster.connect();
+		try{
+			cluster = Cluster.builder().addContactPoint(hostname).build();
+			session = cluster.connect();
+		}
+		catch(Exception e){
+			errorHandler.error("Unexpected exception while initialising CassandraAppender.", e, ErrorCode.GENERIC_FAILURE);
+		}
 	}
 
+	/**
+	 * Method that creates Batch prepared statement for Cassandra from the events in the queue
+	 * and executes it in the database
+	 * @see {@link DataBaseAppender}{@link #saveQueue()} 
+	 * @see {@link Event}
+	 * @see {@link BatchStatement}
+	 * @see {@link PreparedStatement}
+	 */
 	@Override
 	protected void saveQueue() 
 	{
@@ -107,6 +131,10 @@ public class CassandraAppender extends DataBaseAppender {
 		 
 	}
 
+	/**
+	 * Close the opened connection to Cassandra database
+	 * @see {@link OrientDBAppender}{@link #close()}
+	 */
 	@Override
 	public void close() {
 		// TODO Auto-generated method stub

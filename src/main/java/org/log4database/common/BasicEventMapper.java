@@ -5,6 +5,12 @@ import java.util.Date;
 import org.apache.log4j.spi.LoggingEvent;
 import org.log4database.EventMapper;
 
+/**
+ * Log4j log events converter that converts events into a simple event
+ * this object can be used by many appenders in order to store it.
+ * @see {@link Event}
+ * @author ZAHID Mohammed<zahid.med@gmail.com>
+ */
 public class BasicEventMapper extends EventMapper{
 
 	
